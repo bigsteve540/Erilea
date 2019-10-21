@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70780cb94f6526745a591de1dceb475c, type: 3}
+  m_Name: Yuutsu
+  m_EditorClassIdentifier: 
+  BaseHealth: 525
+  HealthPerLevel: 117.65
+  BaseHealthRegen: 0.5
+  HealthRegenPerLevel: 0.26
+  ResourceType: 1
+  BaseResource: 450
+  ResourcePerLevel: 33
+  BaseResourceRegen: 2
+  ResourceRegenPerLevel: 0.35
+  AttackRange: 3
+  BaseAttackSpeed: 0.625
+  AttackSpeedPerLevel: 0
+  VFX:
+  - {fileID: 2782469141873555794, guid: 01fc15228a6b36a4abc272508f583685, type: 3}
+  Abilities:
+  - {fileID: 11400000, guid: 2fcbd093b6d11a64d8a6452cb4c6e59f, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9807067751e7c14fafe1bbcbc8477d0, type: 3}
+  m_Name: Yuutsu Q
+  m_EditorClassIdentifier: 
+  AbilityName: Wrath of the Harvest
+  AbilityDescription: Yuutsu hefts her scythe for 0.75 seconds, then swings her scythe
+    in a circle, dealing 70 / 105 / 155 / 230 / 350 damage. The outer half deals 50%
+    more damage.
+  TargetTags:
+  - Champion
+  - Entity
+  CastTime: 0.75
+  CastDistance: 4
+  AbilityValues:
+  - IsNegative: 1
+    Value: 70
+    Type: 0
+  - IsNegative: 1
+    Value: 105
+    Type: 0
+  - IsNegative: 1
+    Value: 155
+    Type: 0
+  - IsNegative: 1
+    Value: 230
+    Type: 0
+  - IsNegative: 1
+    Value: 350
+    Type: 0
+  AbilityCosts:
+  - 55
+  - 65
+  - 70
+  - 75
+  - 80
+  AbilityCooldowns:
+  - 9
+  - 8
+  - 7
+  - 6
+  - 5
