@@ -1,6 +1,54 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &894711347
+--- !u!114 &7686481172939301714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8256007156857491786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30d68213b9050074b8c20c2163195312, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2893026126020105505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8256007156857491786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de27c79165d0a754dbe7e86bd5bb09ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3723065949673800981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8256007156857491786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fccc223e3f688e043b94c47b69b92f54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8478376081207824105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8256007156857491786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da894784dc3fbe84dacd6443f4504ae4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4910949778739480369
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12,11 +60,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 033bb31dce1feaa4b83bab3e8945ef77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VFXPoint: {fileID: 4632878116911679130}
   _shieldNow: 0
   _healthCurrent: 0
   _resourceCurrent: 0
-  abilityLevels: 00000000000000000000000000000000
+  abilityLevels: 01000000010000000100000001000000
 --- !u!1001 &6368348942078814463
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27,7 +74,7 @@ PrefabInstance:
     - target: {fileID: 3095047559754865245, guid: 9309f4caaf3bbbc44bfda84ddeb0d8bf,
         type: 3}
       propertyPath: m_Name
-      value: ChampionRespawnPoint Variant
+      value: ChampionRespawnPoint
       objectReference: {fileID: 0}
     - target: {fileID: 3095047559754865242, guid: 9309f4caaf3bbbc44bfda84ddeb0d8bf,
         type: 3}
@@ -84,18 +131,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3095047559413332402, guid: 9309f4caaf3bbbc44bfda84ddeb0d8bf, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9309f4caaf3bbbc44bfda84ddeb0d8bf, type: 3}
 --- !u!1 &8256007156857491786 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3095047559413332405, guid: 9309f4caaf3bbbc44bfda84ddeb0d8bf,
-    type: 3}
-  m_PrefabInstance: {fileID: 6368348942078814463}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &4632878116911679130 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1741663281504071269, guid: 9309f4caaf3bbbc44bfda84ddeb0d8bf,
     type: 3}
   m_PrefabInstance: {fileID: 6368348942078814463}
   m_PrefabAsset: {fileID: 0}

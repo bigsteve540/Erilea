@@ -6,7 +6,14 @@ public class DealDamageOnCollision : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Firing");
-        other.transform.parent.GetComponent<Champion>().ModifyHealth(new ValueEffector(true, 100f, EFFECTOR_TYPE.Flat));
+        other.transform.parent.GetComponent<HealthController>().TakeDamage(
+            new DamageData(
+                gameObject,
+                other.gameObject,
+                100f,
+                EFFECTOR_TYPE.Flat,
+                DAMAGE_TYPE.True
+                )
+        );
     }
 }

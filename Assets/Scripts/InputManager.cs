@@ -6,11 +6,14 @@ public class InputManager : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField]
+    AbilityController ability;
+    [SerializeField]
     Champion champion;
 
     void Start()
     {
         champion = FindObjectOfType<Champion>();
+        ability = FindObjectOfType<AbilityController>();
     }
 
     // Update is called once per frame
@@ -18,22 +21,24 @@ public class InputManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            champion.Cast(ABILITY_CODE.Q);
+            ability.Cast(ABILITY_CODE.Q);
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            champion.Cast(ABILITY_CODE.W);
+            ability.Cast(ABILITY_CODE.W);
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            champion.Cast(ABILITY_CODE.E);
+            ability.Cast(ABILITY_CODE.E);
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            champion.Cast(ABILITY_CODE.R);
+            ability.Cast(ABILITY_CODE.R);
         }
 
-        if (Input.GetKeyDown(KeyCode.S)) { champion.StopMoving(); }
+        if (Input.GetKeyDown(KeyCode.S)) { champion.CancelPath(); }
+
+        if (Input.GetKeyDown(KeyCode.L)) { champion.LevelUp(); }
 
         if (Input.GetMouseButtonDown(1))
         {

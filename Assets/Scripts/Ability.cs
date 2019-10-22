@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Ability : ScriptableObject
+public abstract class Ability
 {
-    [Header("Text")]
-    public string AbilityName;
-    [TextArea]
-    public string AbilityDescription;
-    public string[] TargetTags;
+    public abstract AbilityData GetData();
+    protected Champion champ;
 
-    [Header("Cast Information")]
-    public float CastTime;
-    public float CastDistance;
+    public abstract void Fire(GameObject caster);
 
-    [Header("Values")]
-    public ValueEffector[] AbilityValues;
-    public float[] AbilityCosts;
-    public float[] AbilityCooldowns;
+    public virtual void OnAbilityTrigger(GameObject caster) { }
+    public virtual void OnAbilityComplete(GameObject caster) { }
+    public virtual void OnAbilityUpdate(GameObject caster, float deltaTime) { }
 
-    public abstract void Fire(GameObject caster, int abilityLevel);
+    public Ability(Champion c)
+    {
+        champ = c;
+    }
 }
+
+

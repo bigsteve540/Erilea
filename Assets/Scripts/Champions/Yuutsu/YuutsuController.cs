@@ -9,54 +9,55 @@ public class YuutsuController : Champion
     private float DamageTaken = 0f;
     private float PassiveHealTick = 0f;
 
-    private IEnumerator ActivePassive = null;
-
-    protected override void Awake()
+    protected override void LoadAbilities()
     {
-        base.Awake();
-        OnDamageTaken += TriggerPassive;
+        abilities = new Ability[2] 
+        {
+            new YuutsuQ(this),
+            new YuutsuW(this)
+            //add remaining later
+        };
+    }
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        HealthController.OnDamageTaken += TriggerPassive;
     }
 
-    public override void ModifyHealth(ValueEffector v)
+    public void TriggerPassive(DamageData dd)
     {
-        if (v.IsNegative)
-        {
-            v.Value *= 1.2f;
-            base.ModifyHealth(v);
-        }
-        else
-        {
-            base.ModifyHealth(v);
-        }   
-    }
+        if (dd.Receiver != gameObject)
+            return;
 
-    public void TriggerPassive(float v)
-    {
-        DamageTaken += v * 0.5f;
+        DamageTaken += dd.Value * 0.5f;
         PassiveHealTick = DamageTaken * 0.1f;
+
+        StopCoroutine(CheckPassiveConditions());
 
         if (ActivePassive == null)
         {
             ActivePassive = CheckPassiveConditions();
             StartCoroutine(CheckPassiveConditions());
         }
-        Debug.Log("Passive Triggered: " + ActivePassive);
     }
+
+    private IEnumerator ActivePassive = null;
 
     protected override IEnumerator CheckPassiveConditions()
     {
-        GameObject visual = Instantiate(ChampionStats.VFX[0], VFXPoint);
+        GameObject activeVFX = GetComponent<VFXController>().ActivateVFX(ChampionStats.VFX[0]);
 
-        while (DamageTaken > totalHealed) //damageTaken gets recalculated upon taking new damage, fix loop to accomodate this.
+        while (DamageTaken >= PassiveHealTick)
         {
             yield return new WaitForSecondsRealtime(1f);
             Health += PassiveHealTick;
-            DamageTaken += PassiveHealTick;
-            Debug.Log("Tick");
+            DamageTaken -= PassiveHealTick;
         }
         DamageTaken = 0;
         ActivePassive = null;
-        Destroy(visual);
+        GetComponent<VFXController>().DestroyVFX(activeVFX);
         yield return null;
     }
+
+  
 }

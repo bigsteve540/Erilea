@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public enum ABILITY_CODE { Q = 0, W = 1, E = 2, R = 3 }
 
+[RequireComponent(typeof(StatusController))]
+[RequireComponent(typeof(HealthController))]
+[RequireComponent(typeof(AbilityController))]
+[RequireComponent(typeof(VFXController))]
 public abstract class Champion : MonoBehaviour
 {
-    public virtual string Name { get; }
+    public abstract string Name { get; }
 
     protected ChampionData ChampionStats { get; set; }
-
-    public Transform VFXPoint;
 
     [SerializeField]
     public int Level { get; private set; } = 1;
@@ -29,14 +30,25 @@ public abstract class Champion : MonoBehaviour
     {
         get
         {
-            if (Level > 1)
-            {
-                return ChampionStats.BaseHealth + (ChampionStats.HealthPerLevel * Level);
-            }
-            return ChampionStats.BaseHealth;
+            return ChampionStats.BaseHealth + (ChampionStats.HealthPerLevel * (Level - 1));
+        }
+    }
+
+    public float HealthRegen
+    {
+        get
+        {
+            return ChampionStats.BaseHealthRegen + (ChampionStats.HealthRegenPerLevel * (Level - 1));
         }
     }
     #endregion
+
+    [SerializeField]
+    private float _physicalRes = 0;
+    public float PhysicalResistance { get { return _physicalRes; } protected set { _physicalRes = value; } }
+    [SerializeField]
+    private float _magicRes = 0;
+    public float MagicResistance { get { return _magicRes; } protected set { _magicRes = value; } }
 
     #region Resources
     [SerializeField]
@@ -53,147 +65,207 @@ public abstract class Champion : MonoBehaviour
             return ChampionStats.BaseResource;
         }
     }
+
+    public float ResourceRegen
+    {
+        get
+        {
+            return ChampionStats.BaseResourceRegen + (ChampionStats.ResourceRegenPerLevel * (Level - 1));
+        }
+    }
     #endregion
 
     public float AttackRange { get { return ChampionStats.AttackRange; } }
 
+    public bool Casting { get; set; }
+
     [SerializeField]
     private int[] abilityLevels = new int[4] { 1, 1, 1, 1 };
 
-    private NavMeshAgent agent;
+    protected Ability[] abilities;
 
-    public delegate void HealthModified(float v);
-
-    protected event HealthModified OnHealTaken;
-    protected event HealthModified OnDamageTaken;
+    private NavMeshAgent Agent { get; set; }
 
     protected abstract IEnumerator CheckPassiveConditions();
 
+    protected virtual void OnEnable() { LoadChampion(Name); LoadAbilities(); }
+
+    public int GetAbilityLevel(int index)
+    {
+        return abilityLevels[index];
+    }
+    public Ability GetAbility(int index)
+    {
+        return abilities[index];
+    }
+    public AbilityData GetAbilityData(int index)
+    {
+        return abilities[index].GetData();
+    }
+
+    public void AddHealth(float v)
+    {
+        Health += v;
+    }
+    public void SubHealth(float v)
+    {
+        Health -= v;
+    }
+
+    public void AddShield(float v)
+    {
+        Shield += v;
+    }
+    public void SubShield(float v)
+    {
+        Shield -= v;
+    }
+    public void NukeShield()
+    {
+        Shield = 0;
+    }
+
+    public void AddResistances(DAMAGE_TYPE type, float val)
+    {
+        switch (type)
+        {
+            case DAMAGE_TYPE.Mixed:
+                PhysicalResistance += val;
+                MagicResistance += val;
+                break;
+            case DAMAGE_TYPE.Magical:
+                MagicResistance += val;
+                break;
+            case DAMAGE_TYPE.Physical:
+                PhysicalResistance += val;
+                break;
+            default:
+                throw new Exception($"Cannot Add resistance for: {type} damage");
+        }
+    }
+    public void RemoveResistances(DAMAGE_TYPE type, float val)
+    {
+        switch (type)
+        {
+            case DAMAGE_TYPE.Mixed:
+                PhysicalResistance -= val;
+                MagicResistance -= val;
+                break;
+            case DAMAGE_TYPE.Magical:
+                MagicResistance -= val;
+                break;
+            case DAMAGE_TYPE.Physical:
+                PhysicalResistance -= val;
+                break;
+            default:
+                throw new Exception($"Cannot Remove resistance for: {type} damage");
+        }
+    }
+    public float GetMixedResistances()
+    {
+        return PhysicalResistance + MagicResistance;
+    }
+
+    public void LevelUp()
+    {
+        if (Level >= 20)
+        { Level = 20; return; }
+
+        Level++;
+        Debug.Log("Level: " + Level);
+
+        MaxHealth.ToString();
+        Health += ChampionStats.HealthPerLevel;
+
+        MaxResource.ToString();
+        Resource += ChampionStats.ResourcePerLevel;
+
+        HealthRegen.ToString();
+
+        //Trigger Levelup VFX
+    }
+
     private void LoadChampion(string name)
     {
-        agent = GetComponent<NavMeshAgent>();
+        Agent = GetComponent<NavMeshAgent>();
 
         ChampionStats = Resources.Load<ChampionData>($"Champions/{name}/{name}");
 
         Health = MaxHealth;
         Resource = MaxResource;
     }
+    protected abstract void LoadAbilities();
 
-    public virtual void ModifyHealth(ValueEffector v)
+    public void Move(Vector3 position) { if(!Casting) Agent.SetDestination(position); }
+    public void CancelPath()
     {
-        if (v.IsNegative)
-        {
-            float damage = 0f;
-            switch (v.Type)
-            {
-                case EFFECTOR_TYPE.Flat:
-                    {
-                        damage = ShieldDamage(v.Value);
-                        Health -= damage;
-                    }
-                    break;
-                case EFFECTOR_TYPE.PercentCurrent:
-                    {
-                        damage = ShieldDamage(Health * v.Value);
-                        Health -= damage;
-                    }
-                    break;
-                case EFFECTOR_TYPE.PercentMax:
-                    {
-                        damage = ShieldDamage(MaxHealth * v.Value);
-                        Health -= damage;
-                    }
-                    break;
-                case EFFECTOR_TYPE.PercentMis:
-                    {
-                        damage = ShieldDamage((MaxHealth - Health) * v.Value);
-                        Health -= damage;
-                    }
-                    break;
-            }
-            CheckForDeath();
-            OnDamageTaken?.Invoke(damage);
-        }
-        else
-        {
-            float heal = 0f;
-            switch (v.Type)
-            {
-                case EFFECTOR_TYPE.Flat:
-                    {
-                        heal = v.Value;
-                        _healthCurrent += heal;
-                    }
-                    break;
-                case EFFECTOR_TYPE.PercentCurrent:
-                    {
-
-                    }
-                    break;
-                case EFFECTOR_TYPE.PercentMax:
-                    {
-
-                    }
-                    break;
-                case EFFECTOR_TYPE.PercentMis:
-                    {
-
-                    }
-                    break;
-            }
-            OnHealTaken?.Invoke(heal);
-        }
+        Agent.isStopped = true;
+        Agent.ResetPath();
+        Agent.isStopped = false;
     }
-
-    private void CheckForDeath()
+    public void StopMoving()
     {
-        if(_healthCurrent <= 0f)
-        {
-            //do death shit
-        }
+        Agent.isStopped = true;
     }
-
-    private float ShieldDamage(float value)
+    public void UnlockMovement()
     {
-        if(_shieldNow >= value)
-        {
-            _shieldNow -= value;
-            return 0f;
-        }
-        else
-        {
-            value -= _shieldNow;
-            _shieldNow = 0;
-            return value;
-        }
+        Agent.isStopped = false;
     }
-
-    public void Cast(ABILITY_CODE key) { ChampionStats.Abilities[System.Convert.ToInt32(key)].Fire(gameObject, 1); }
-
-    public void Move(Vector3 position) { agent.isStopped = false; agent.SetDestination(position); }
-
-    public void StopMoving() { agent.isStopped = true; }
-
-    protected virtual void Awake() { LoadChampion(Name); }
-
-    void Update()
-    {
-        
-    }
+    //add TurntoFace method
 }
 
 public enum EFFECTOR_TYPE { Flat, PercentMax, PercentMis, PercentCurrent }
-[System.Serializable]
-public struct ValueEffector
+public enum DAMAGE_TYPE { Physical, Magical, Mixed, True }
+[Serializable]
+public struct DamageData
+{
+    [HideInInspector]
+    public GameObject Dealer;
+    [HideInInspector]
+    public GameObject Receiver;
+    public float Value;
+    public EFFECTOR_TYPE Type;
+    public DAMAGE_TYPE DamageType;
+
+    public DamageData(GameObject dealer, GameObject receiver, float val, EFFECTOR_TYPE type, DAMAGE_TYPE dtype)
+    {
+        Dealer = dealer;
+        Receiver = receiver;
+        Value = val;
+        Type = type;
+        DamageType = dtype;
+    }
+}
+[Serializable]
+public struct HealData
+{
+    [HideInInspector]
+    public GameObject Dealer;
+    [HideInInspector]
+    public GameObject Receiver;
+    public float Value;
+    public EFFECTOR_TYPE Type;
+
+    public HealData(GameObject dealer, GameObject receiver, float val, EFFECTOR_TYPE type)
+    {
+        Dealer = dealer;
+        Receiver = receiver;
+        Value = val;
+        Type = type;
+    }
+}
+
+[Serializable]
+public struct ResourceEffector
 {
     public bool IsNegative;
     public float Value;
     public EFFECTOR_TYPE Type;
 
-    public ValueEffector(bool isNeg, float val, EFFECTOR_TYPE type)
+    public ResourceEffector(bool isNeg, float val, EFFECTOR_TYPE type)
     {
-        Value = val;
         IsNegative = isNeg;
+        Value = val;
         Type = type;
     }
 }

@@ -25,14 +25,9 @@ public class ChampionData : ScriptableObject
 
     [Header("Auto Attacking")]
     public float AttackRange;
-
     public float BaseAttackSpeed;
     public float AttackSpeedPerLevel;
 
     [Header("Visuals")]
     public GameObject[] VFX;
-
-    [Header("Abilities")]
-    [SerializeField]
-    public Ability[] Abilities = new Ability[4];
 }

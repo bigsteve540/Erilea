@@ -26,8 +26,3 @@ MonoBehaviour:
   AttackSpeedPerLevel: 0
   VFX:
   - {fileID: 2782469141873555794, guid: 01fc15228a6b36a4abc272508f583685, type: 3}
-  Abilities:
-  - {fileID: 11400000, guid: 2fcbd093b6d11a64d8a6452cb4c6e59f, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}

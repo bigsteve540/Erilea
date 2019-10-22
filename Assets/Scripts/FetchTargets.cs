@@ -44,14 +44,14 @@ public static class FetchTargets
 
         validHits.Clear();
 
-            for (int i = 0; i < hits.Length - 1; i++)
+        for (int i = 0; i < hits.Length; i++)
+        {
+            if (hits[i].CompareTag(targetTag))
             {
-                if (hits[i].transform.CompareTag(targetTag))
-                {
-                    validHits.Add(hits[i]);
-                }
+                validHits.Add(hits[i]);
             }
-            return validHits.ToArray();
+        }
+        return validHits.ToArray();
     }
     public static Collider[] ByCircle(GameObject caster, Vector3 origin, Vector3 dir, float radius, string targetTag, float arcAngle)
     {

@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47ec000a62859d64586fc6319c423520, type: 3}
+  m_Name: Yuutsu W
+  m_EditorClassIdentifier: 
+  AbilityName: Possessed Lament
+  AbilityDescription: "Yuutsu enters a defensive stance reducing damage by /15%/20%/25%/30%/35%/
+    for 2.0 / 2.5 / 3.0 / 3.5 / 4.0 seconds and taunting nearby enemies for half that
+    time. While in this stance, Yuutsu cannot move\r\n or perform any actions. Any
+    attack against Yuutsu applies Farmer's Favour.\r\n\r\nFarmer's Favour - Damage
+    is dealt to the target with Farmer's Favour equal to the amount Yuutsu has healed
+    during Possessed Lament over 3 seconds. Refreshes on hit."
+  TargetTags: []
+  CastTime: 0
+  CastDistance: 0
+  VFX:
+  - {fileID: 9107006043452933268, guid: de580ba83e0e3cc4383e0925ff04175e, type: 3}
+  AbilityCosts:
+  - 50
+  - 60
+  - 70
+  - 90
+  - 110
+  AbilityCooldowns:
+  - 22
+  - 20
+  - 18
+  - 15
+  - 11
+  Values:
+  - Dealer: {fileID: 0}
+    Receiver: {fileID: 0}
+    Value: 15
+    Type: 0
+    DamageType: 2
+  - Dealer: {fileID: 0}
+    Receiver: {fileID: 0}
+    Value: 20
+    Type: 0
+    DamageType: 2
+  - Dealer: {fileID: 0}
+    Receiver: {fileID: 0}
+    Value: 25
+    Type: 0
+    DamageType: 2
+  - Dealer: {fileID: 0}
+    Receiver: {fileID: 0}
+    Value: 30
+    Type: 0
+    DamageType: 2
+  - Dealer: {fileID: 0}
+    Receiver: {fileID: 0}
+    Value: 35
+    Type: 0
+    DamageType: 2
