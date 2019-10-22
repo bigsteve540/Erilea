@@ -15,7 +15,7 @@ public class YuutsuQ : Ability
         return data;
     }
 
-    public override void Fire(GameObject caster)
+    public override void Fire(Champion caster)
     {
         if (champ.Casting)
             return;
@@ -23,18 +23,18 @@ public class YuutsuQ : Ability
         //Trigger Visual
         for (int i = 0; i < data.TargetTags.Length; i++)
         {
-            Collider[] outerHits = FetchTargets.ByCircle(caster, data.CastDistance, data.TargetTags[i]);
-            Collider[] innerHits = FetchTargets.ByCircle(caster, data.CastDistance / 2, data.TargetTags[i]);
+            Collider[] outerHits = FetchTargets.ByCircle(caster.gameObject, data.CastDistance, data.TargetTags[i]);
+            Collider[] innerHits = FetchTargets.ByCircle(caster.gameObject, data.CastDistance / 2, data.TargetTags[i]);
 
             CheckRadii(caster, outerHits, innerHits);
         }
     }
 
-    public void CheckRadii(GameObject caster, Collider[] a, Collider[] b)
+    public void CheckRadii(Champion caster, Collider[] a, Collider[] b)
     {
         for (int i = 0; i < a.Length; i++)
         {
-            if (a[i].transform.parent?.gameObject == caster)
+            if (a[i].transform.parent?.gameObject == caster.gameObject)
                 continue;
 
             bool found = false;
@@ -54,7 +54,7 @@ public class YuutsuQ : Ability
             {
                 //collider only in outer, deal 150% damage.
                 DamageData multiplied = new DamageData(
-                    caster,
+                    caster.gameObject,
                     a[i].gameObject,
                     data.Values[champ.GetAbilityLevel(0) - 1].Value * 1.5f,
                     data.Values[champ.GetAbilityLevel(0) - 1].Type ,

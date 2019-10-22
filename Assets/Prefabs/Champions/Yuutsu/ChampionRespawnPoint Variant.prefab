@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &7686481172939301714
+--- !u!114 &445040068357529865
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,7 +9,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 8256007156857491786}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30d68213b9050074b8c20c2163195312, type: 3}
+  m_Script: {fileID: 11500000, guid: d802648b6eb5e8341b889bedd40fd395, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1013493930769222985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8256007156857491786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033bb31dce1feaa4b83bab3e8945ef77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthCurrent: 0
+  _physicalRes: 0
+  _magicRes: 0
+  movespeedForAgent: 0
+  _shieldNow: 0
+  _resourceCurrent: 0
+  abilityLevels: 01000000010000000100000001000000
+--- !u!114 &2639794133637721738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8256007156857491786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 262df16b801902347a20a7851ca6e9a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &2893026126020105505
@@ -36,6 +67,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fccc223e3f688e043b94c47b69b92f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  abilityActive: 0
+--- !u!114 &7686481172939301714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8256007156857491786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30d68213b9050074b8c20c2163195312, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8478376081207824105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48,22 +92,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da894784dc3fbe84dacd6443f4504ae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4910949778739480369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8256007156857491786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 033bb31dce1feaa4b83bab3e8945ef77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _shieldNow: 0
-  _healthCurrent: 0
-  _resourceCurrent: 0
-  abilityLevels: 01000000010000000100000001000000
 --- !u!1001 &6368348942078814463
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -129,6 +157,11 @@ PrefabInstance:
     - target: {fileID: 3095047559754865242, guid: 9309f4caaf3bbbc44bfda84ddeb0d8bf,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3095047559413332400, guid: 9309f4caaf3bbbc44bfda84ddeb0d8bf,
+        type: 3}
+      propertyPath: m_Speed
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -21,7 +21,7 @@ public class YuutsuW : Ability
         return data;
     }
 
-    public override void Fire(GameObject caster)
+    public override void Fire(Champion caster)
     {
         if (champ.Casting)
             return;
@@ -35,7 +35,7 @@ public class YuutsuW : Ability
     }
 
     private GameObject activeVFX;
-    public override void OnAbilityTrigger(GameObject caster)
+    public override void OnAbilityTrigger(Entity caster)
     {
         activeVFX = caster.GetComponent<VFXController>().ActivateVFX(data.VFX[0]);
 
@@ -48,13 +48,13 @@ public class YuutsuW : Ability
     }
 
     private float timer;
-    public override void OnAbilityUpdate(GameObject caster, float deltaTime)
+    public override void OnAbilityUpdate(Entity caster, float deltaTime)
     {
         timer += deltaTime;
 
-        //check for people attempting to hit yuutsu :: give them farmer's favour
+        //TODO: check for people attempting to hit yuutsu :: give them farmer's favour
 
-        if(timer >= YuutsuWActive.Durations[champ.GetAbilityLevel(1)])
+        if(timer >= YuutsuWActive.Durations[champ.GetAbilityLevel(1) - 1])
         {
             caster.GetComponent<StatusController>().RemoveStatusEffect(YuutsuWActive);
             caster.GetComponent<VFXController>().DestroyVFX(activeVFX);
@@ -63,9 +63,9 @@ public class YuutsuW : Ability
         }
     }
 
-    public override void OnAbilityComplete(GameObject caster)
+    public override void OnAbilityComplete(Entity caster)
     {
-        champ.UnlockMovement();
+        champ.CancelPath();
         champ.RemoveResistances(DAMAGE_TYPE.Mixed, data.Values[champ.GetAbilityLevel(1) - 1].Value);
         YuutsuWActive.StatusEffectTriggers.OnEffectStart -= OnAbilityTrigger;
         YuutsuWActive.StatusEffectTriggers.OnUpdate -= OnAbilityUpdate;

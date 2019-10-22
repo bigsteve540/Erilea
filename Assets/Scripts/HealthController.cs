@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthController : MonoBehaviour
+public class HealthController : Controller
 {
-    private Champion me;
-
     public delegate void DamageTaken(DamageData dd);
     public delegate void HealTaken(HealData hd);
     public delegate void OnDying();
@@ -14,10 +12,10 @@ public class HealthController : MonoBehaviour
     public static event DamageTaken OnDamageTaken;
     public static event OnDying OnDeath;
 
-    void Start() { InvokeRepeating("RegenerateHP", 1f, 1f); me = GetComponent<Champion>(); }
+    protected override void Start() { base.Start(); InvokeRepeating("RegenerateHP", 1f, 1f); }
     protected virtual void RegenerateHP()
     {
-        me.AddHealth(me.HealthRegen);
+        target.AddHealth(target.HealthRegen);
     }
 
     public virtual void TakeDamage(DamageData dd)
@@ -27,13 +25,13 @@ public class HealthController : MonoBehaviour
         switch (dd.DamageType)
         {
             case DAMAGE_TYPE.Mixed:
-                damage = dd.Value * 1 - me.GetMixedResistances();
+                damage = dd.Value * 1 - target.GetMixedResistances();
                 break;
             case DAMAGE_TYPE.Magical:
-                damage = dd.Value * 1 - me.MagicResistance;
+                damage = dd.Value * 1 - target.MagicResistance;
                 break;
             case DAMAGE_TYPE.Physical:
-                damage = dd.Value * 1 - me.PhysicalResistance;
+                damage = dd.Value * 1 - target.PhysicalResistance;
                 break;
             case DAMAGE_TYPE.True:
                 damage = dd.Value;
@@ -45,25 +43,25 @@ public class HealthController : MonoBehaviour
             case EFFECTOR_TYPE.Flat:
                 {
                     damage = ShieldDamage(dd.Value);
-                    me.SubHealth(damage);
+                    target.SubHealth(damage);
                 }
                 break;
             case EFFECTOR_TYPE.PercentCurrent:
                 {
-                    damage = ShieldDamage(me.Health * dd.Value);
-                    me.SubHealth(damage);
+                    damage = ShieldDamage(target.Health * dd.Value);
+                    target.SubHealth(damage);
                 }
                 break;
             case EFFECTOR_TYPE.PercentMax:
                 {
-                    damage = ShieldDamage(me.MaxHealth * dd.Value);
-                    me.SubHealth(damage);
+                    damage = ShieldDamage(target.MaxHealth * dd.Value);
+                    target.SubHealth(damage);
                 }
                 break;
             case EFFECTOR_TYPE.PercentMis:
                 {
-                    damage = ShieldDamage((me.MaxHealth - me.Health) * dd.Value);
-                    me.SubHealth(damage);
+                    damage = ShieldDamage((target.MaxHealth - target.Health) * dd.Value);
+                    target.SubHealth(damage);
                 }
                 break;
         }
@@ -81,25 +79,25 @@ public class HealthController : MonoBehaviour
             case EFFECTOR_TYPE.Flat:
                 {
                     heal = hd.Value;
-                    me.AddHealth(heal);
+                    target.AddHealth(heal);
                 }
                 break;
             case EFFECTOR_TYPE.PercentCurrent:
                 {
-                    heal = me.Health * hd.Value;
-                    me.AddHealth(heal);
+                    heal = target.Health * hd.Value;
+                    target.AddHealth(heal);
                 }
                 break;
             case EFFECTOR_TYPE.PercentMax:
                 {
-                    heal = me.MaxHealth * hd.Value;
-                    me.AddHealth(heal);
+                    heal = target.MaxHealth * hd.Value;
+                    target.AddHealth(heal);
                 }
                 break;
             case EFFECTOR_TYPE.PercentMis:
                 {
-                    heal = (me.MaxHealth - me.Health) * hd.Value;
-                    me.AddHealth(heal);
+                    heal = (target.MaxHealth - target.Health) * hd.Value;
+                    target.AddHealth(heal);
                 }
                 break;
         }
@@ -109,22 +107,27 @@ public class HealthController : MonoBehaviour
 
     private float ShieldDamage(float value)
     {
-        if (me.Shield >= value)
+        if (!(target is Champion))
+            return value;
+
+        Champion c = target as Champion;
+
+        if (c.Shield >= value)
         {
-            me.SubShield(value);
+            c.SubShield(value);
             return 0f;
         }
         else
         {
-            value -= me.Shield;
-            me.NukeShield();
+            value -= c.Shield;
+            c.NukeShield();
             return value;
         }
     }
 
     private void CheckForDeath()
     {
-        if (me.Health <= 0f)
+        if (target.Health <= 0f)
         {
             OnDeath?.Invoke();
         }

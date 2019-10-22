@@ -15,5 +15,6 @@ public class DealDamageOnCollision : MonoBehaviour
                 DAMAGE_TYPE.True
                 )
         );
+        other.transform.parent.GetComponent<CCController>().ApplyCC(new Slow(gameObject, 100f, false, 2f));
     }
 }

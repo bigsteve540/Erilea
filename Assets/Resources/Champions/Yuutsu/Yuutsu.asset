@@ -16,13 +16,14 @@ MonoBehaviour:
   HealthPerLevel: 117.65
   BaseHealthRegen: 0.5
   HealthRegenPerLevel: 0.26
-  ResourceType: 1
-  BaseResource: 450
-  ResourcePerLevel: 33
-  BaseResourceRegen: 2
-  ResourceRegenPerLevel: 0.35
   AttackRange: 3
   BaseAttackSpeed: 0.625
   AttackSpeedPerLevel: 0
   VFX:
   - {fileID: 2782469141873555794, guid: 01fc15228a6b36a4abc272508f583685, type: 3}
+  BaseMovementSpeed: 325
+  ResourceType: 1
+  BaseResource: 450
+  ResourcePerLevel: 33
+  BaseResourceRegen: 2
+  ResourceRegenPerLevel: 0.35

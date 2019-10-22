@@ -6,6 +6,8 @@ public class YuutsuController : Champion
 {
     public override string Name => "Yuutsu";
 
+    protected override string Filepath => "Champions/Yuutsu/Yuutsu";
+
     private float DamageTaken = 0f;
     private float PassiveHealTick = 0f;
 
@@ -41,11 +43,13 @@ public class YuutsuController : Champion
         }
     }
 
+    //change to update loop?
+
     private IEnumerator ActivePassive = null;
 
     protected override IEnumerator CheckPassiveConditions()
     {
-        GameObject activeVFX = GetComponent<VFXController>().ActivateVFX(ChampionStats.VFX[0]);
+        GameObject activeVFX = GetComponent<VFXController>().ActivateVFX(stats.VFX[0]);
 
         while (DamageTaken >= PassiveHealTick)
         {
@@ -58,6 +62,4 @@ public class YuutsuController : Champion
         GetComponent<VFXController>().DestroyVFX(activeVFX);
         yield return null;
     }
-
-  
 }

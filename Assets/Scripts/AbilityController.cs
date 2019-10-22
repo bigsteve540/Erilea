@@ -3,34 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class AbilityController : MonoBehaviour
+public class AbilityController : Controller
 {
-    private Champion me;
-
     public float CastTimeCurrent { get; private set; }
     public float TotalCastTime { get; private set; }
     private Ability toCast;
     public bool abilityActive;
+    private Champion champion;
 
-    void Start() { me = GetComponent<Champion>(); }
+    protected override void Start() { base.Start();  champion = target as Champion; }
 
     public void Cast(ABILITY_CODE key)
     {
-        if (me.Casting || abilityActive)
+        if (champion.Casting || abilityActive)
             return;
 
         int index = Convert.ToInt32(key);
-        toCast = me.GetAbility(index);
+        toCast = champion.GetAbility(index);
 
-        if (me.GetAbilityData(index).CastTime > 0f)
+        if (champion.GetAbilityData(index).CastTime > 0f)
         {
-            me.StopMoving();
-            TotalCastTime = me.GetAbilityData(index).CastTime;
+            champion.StopMoving();
+            TotalCastTime = champion.GetAbilityData(index).CastTime;
             abilityActive = true;
         }
         else
         {
-            toCast.Fire(gameObject);
+            toCast.Fire(champion);
         }
         //trigger vfx or smth
     }
@@ -43,12 +42,12 @@ public class AbilityController : MonoBehaviour
 
             if(CastTimeCurrent >= TotalCastTime)
             {
-                toCast.Fire(gameObject);
-                me.UnlockMovement();
+                toCast.Fire(champion);
+                champion.UnlockMovement();
 
                 toCast = null;
                 CastTimeCurrent = 0f;
-                me.Casting = false;
+                champion.Casting = false;
             }
         }
     }

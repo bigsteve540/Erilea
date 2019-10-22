@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum RESOURCE { None, Mana, Energy, Points }
-
-[CreateAssetMenu(menuName ="Champions/Data Container")]
-public class ChampionData : ScriptableObject
+[CreateAssetMenu(menuName = "Entity/Data")]
+public class EntityData : ScriptableObject
 {
     [Header("Health")]
     public float BaseHealth;
@@ -14,15 +12,6 @@ public class ChampionData : ScriptableObject
     public float BaseHealthRegen;
     public float HealthRegenPerLevel;
 
-    [Header("Resource")]
-    public RESOURCE ResourceType;
-
-    public float BaseResource;
-    public float ResourcePerLevel;
-
-    public float BaseResourceRegen;
-    public float ResourceRegenPerLevel;
-
     [Header("Auto Attacking")]
     public float AttackRange;
     public float BaseAttackSpeed;
@@ -30,4 +19,7 @@ public class ChampionData : ScriptableObject
 
     [Header("Visuals")]
     public GameObject[] VFX;
+
+    [Header("Movement")]
+    public float BaseMovementSpeed;
 }
