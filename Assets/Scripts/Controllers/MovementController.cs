@@ -24,7 +24,7 @@ public class MovementController : Controller
     public float CalculateSpeed()
     {
         if (MSMods.Count < 1)
-            return target.GetBaseMS(); //do more rigorous checking for vfx
+            return target.GetBaseMS(); //do more rigorous checking for deciding on speedboostFX or slowFX
 
         float sumFlats = 0f;
         float sumAdditives = 0f; ;

@@ -78,22 +78,15 @@ public abstract class Champion : Entity
         Shield = 0;
     }
 
-    public void LevelUp()
+    public override void LevelUp()
     {
         if (Level >= 20)
         { Level = 20; return; }
 
-        Level++;
-        Debug.Log("Level: " + Level);
-
-        MaxHealth.ToString();
-        Health += stats.HealthPerLevel;
+        base.LevelUp();
 
         MaxResource.ToString();
         Resource += (stats as ChampionData).ResourcePerLevel;
-
-        HealthRegen.ToString();
-
         //Trigger Levelup VFX
     }
 

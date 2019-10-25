@@ -45,6 +45,9 @@ public class YuutsuController : Champion
 
     //change to update loop?
 
+    public delegate void PassiveTickEvent(float val);
+    public static event PassiveTickEvent OnPassiveTick;
+
     private IEnumerator ActivePassive = null;
 
     protected override IEnumerator CheckPassiveConditions()
@@ -53,7 +56,9 @@ public class YuutsuController : Champion
 
         while (DamageTaken >= PassiveHealTick)
         {
-            yield return new WaitForSecondsRealtime(1f);
+            Debug.Log("Tick");
+            yield return new WaitForSeconds(1f);
+            OnPassiveTick?.Invoke(PassiveHealTick);
             Health += PassiveHealTick;
             DamageTaken -= PassiveHealTick;
         }

@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class YuutsuW : Ability
 {
-    private StatusEffect YuutsuWActive;
+    private StatusEffect yuutsuWActive;
+    private GameObject activeVFX;
+    private bool wIsActive;
+    private float timer;
+    private float healedDuringW = 0f;
     private DamageAbilityData data;
+    private StatusEffect farmersFavour;
+    private List<GameObject> allFavours = new List<GameObject>(); 
 
     public YuutsuW(Champion c) : base(c)
     {
         data = Resources.Load("Champions/Yuutsu/Abilities/Yuutsu W") as DamageAbilityData;
-        YuutsuWActive = new StatusEffect
+        yuutsuWActive = new StatusEffect
         {
             Durations = new float[5] { 2f, 2.5f, 3f, 3.5f, 4f },
+            StatusEffectTriggers = new StatusEffectData()
+        };
+        HealthController.OnDamageTaken += GiveFarmersFavour;
+        farmersFavour = new StatusEffect
+        {
+            Durations = new float[1] { 6f },
             StatusEffectTriggers = new StatusEffectData()
         };
     }
@@ -21,23 +33,54 @@ public class YuutsuW : Ability
         return data;
     }
 
+    public void GiveFarmersFavour(DamageData dd)
+    {
+        if (!wIsActive)
+            return;
+
+        dd.Dealer.GetComponent<StatusController>()?.AddStatusEffect(farmersFavour);
+        allFavours.Add(dd.Dealer);
+    }
+    public void PopFarmersFavour(Entity receiver)
+    {
+        DamageData Wpassive = new DamageData(
+            champ.gameObject, 
+            receiver.gameObject, 
+            healedDuringW, 
+            EFFECTOR_TYPE.Flat, 
+            DAMAGE_TYPE.Magical);
+
+        receiver.GetComponent<HealthController>().TakeDamage(Wpassive);
+        farmersFavour.StatusEffectTriggers.OnEffectEnd -= PopFarmersFavour;
+    }
+    public void AddPassiveHeal(float v)
+    {
+        if (!wIsActive)
+            return;
+
+        healedDuringW += v;
+    }
+
     public override void Fire(Champion caster)
     {
         if (champ.Casting)
             return;
 
-        YuutsuWActive.StatusEffectTriggers.OnEffectStart += OnAbilityTrigger;
-        YuutsuWActive.StatusEffectTriggers.OnUpdate += OnAbilityUpdate;
-        YuutsuWActive.StatusEffectTriggers.OnEffectEnd += OnAbilityComplete;
+        allFavours.Clear();
 
-        caster.GetComponent<StatusController>().AddStatusEffect(YuutsuWActive);
+        yuutsuWActive.StatusEffectTriggers.OnEffectStart += OnAbilityTrigger;
+        yuutsuWActive.StatusEffectTriggers.OnUpdate += OnAbilityUpdate;
+        yuutsuWActive.StatusEffectTriggers.OnEffectEnd += OnAbilityComplete;
+
+        YuutsuController.OnPassiveTick += AddPassiveHeal;
+        farmersFavour.StatusEffectTriggers.OnEffectEnd += PopFarmersFavour;
+
+        caster.GetComponent<StatusController>().AddStatusEffect(yuutsuWActive);
         champ.Casting = true;
     }
-
-    private GameObject activeVFX;
-    public override void OnAbilityTrigger(Entity caster)
+    public override void OnAbilityTrigger(Entity receiver)
     {
-        activeVFX = caster.GetComponent<VFXController>().ActivateVFX(data.VFX[0]);
+        activeVFX = receiver.GetComponent<VFXController>().ActivateVFX(data.VFX[0]);
 
         champ.StopMoving();
 
@@ -45,32 +88,37 @@ public class YuutsuW : Ability
         champ.AddResistances(dd.DamageType, dd.Value);
 
         timer = 0f;
+        wIsActive = true;
     }
-
-    private float timer;
-    public override void OnAbilityUpdate(Entity caster, float deltaTime)
+    public override void OnAbilityUpdate(Entity receiver, float deltaTime)
     {
         timer += deltaTime;
 
-        //TODO: check for people attempting to hit yuutsu :: give them farmer's favour
-
-        if(timer >= YuutsuWActive.Durations[champ.GetAbilityLevel(1) - 1])
+        if(timer >= yuutsuWActive.Durations[champ.GetAbilityLevel(1) - 1])
         {
-            caster.GetComponent<StatusController>().RemoveStatusEffect(YuutsuWActive);
-            caster.GetComponent<VFXController>().DestroyVFX(activeVFX);
+            receiver.GetComponent<StatusController>().RemoveStatusEffect(yuutsuWActive);
+            receiver.GetComponent<VFXController>().DestroyVFX(activeVFX);
             activeVFX = null;
             timer = 0;
         }
     }
-
-    public override void OnAbilityComplete(Entity caster)
+    public override void OnAbilityComplete(Entity receiver)
     {
+        for (int i = 0; i < allFavours.Count; i++)
+        {
+            allFavours[i].GetComponent<StatusController>().RemoveStatusEffect(farmersFavour);
+        }
+
         champ.CancelPath();
         champ.RemoveResistances(DAMAGE_TYPE.Mixed, data.Values[champ.GetAbilityLevel(1) - 1].Value);
-        YuutsuWActive.StatusEffectTriggers.OnEffectStart -= OnAbilityTrigger;
-        YuutsuWActive.StatusEffectTriggers.OnUpdate -= OnAbilityUpdate;
-        YuutsuWActive.StatusEffectTriggers.OnEffectEnd -= OnAbilityComplete;
+        yuutsuWActive.StatusEffectTriggers.OnEffectStart -= OnAbilityTrigger;
+        yuutsuWActive.StatusEffectTriggers.OnUpdate -= OnAbilityUpdate;
+        yuutsuWActive.StatusEffectTriggers.OnEffectEnd -= OnAbilityComplete;
+
+        healedDuringW = 0f;
+
         champ.Casting = false;
+        wIsActive = false;
     }
 }
 

@@ -17,6 +17,21 @@ public abstract class Entity : MonoBehaviour
     [SerializeField]
     public int Level { get; protected set; } = 1;
 
+    [SerializeField]
+    private float _adCurrent;
+    public float AttackDamage
+    {
+        get
+        {
+            return stats.BaseAttackDamage + (stats.ATKDMGPerLevel * (Level - 1));
+        }
+
+        protected set
+        {
+            _adCurrent = value;
+        }
+    }
+
     #region Health
     [SerializeField]
     private float _healthCurrent;
@@ -61,6 +76,22 @@ public abstract class Entity : MonoBehaviour
 
     protected virtual void OnEnable() { Load<EntityData>(); }
     private void Start() { MoveSpeed = stats.BaseMovementSpeed; }
+
+    public virtual void LevelUp()
+    {
+        if (Level >= 20)
+        { Level = 20; return; }
+
+        Level++;
+        Debug.Log("Level: " + Level);
+
+        MaxHealth.ToString();
+        Health += stats.HealthPerLevel;
+
+        HealthRegen.ToString();
+
+        AttackDamage.ToString();
+    }
 
     public void AddHealth(float v)
     {
@@ -119,6 +150,7 @@ public abstract class Entity : MonoBehaviour
         stats = Resources.Load<T>(Filepath);
 
         Health = MaxHealth;
+        _adCurrent = AttackDamage;
     }
 
     public float GetBaseMS()

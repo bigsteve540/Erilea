@@ -10,12 +10,6 @@ public class InputManager : MonoBehaviour
     [SerializeField]
     Champion champion;
 
-    void Start()
-    {
-        champion = FindObjectOfType<Champion>();
-        ability = FindObjectOfType<AbilityController>();
-    }
-
     // Update is called once per frame
     void Update()
     {

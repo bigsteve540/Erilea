@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70780cb94f6526745a591de1dceb475c, type: 3}
   m_Name: Yuutsu
   m_EditorClassIdentifier: 
+  BaseAttackDamage: 20
+  ATKDMGPerLevel: 8.925
   BaseHealth: 525
   HealthPerLevel: 117.65
   BaseHealthRegen: 0.5

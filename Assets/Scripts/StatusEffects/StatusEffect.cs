@@ -12,8 +12,8 @@ public class StatusEffect
 
 public class StatusEffectData
 {
-    public delegate void EventStateHandler(Entity caster);
-    public delegate void UpdateEventHandler(Entity caster, float deltaTime);
+    public delegate void EventStateHandler(Entity receiver);
+    public delegate void UpdateEventHandler(Entity receiver, float deltaTime);
 
     public EventStateHandler OnEffectStart;
     public EventStateHandler OnEffectEnd;

@@ -5,6 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Entity/Data")]
 public class EntityData : ScriptableObject
 {
+    [Header("Attack Damage")]
+    public float BaseAttackDamage;
+    public float ATKDMGPerLevel;
+
     [Header("Health")]
     public float BaseHealth;
     public float HealthPerLevel;
