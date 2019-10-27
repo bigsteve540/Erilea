@@ -62,8 +62,9 @@ public abstract class Champion : Entity
     }
     public AbilityData GetAbilityData(int index)
     {
-        return abilities[index].GetData();
+        return abilities[index].Data;
     }
+
 
     public void AddShield(float v)
     {

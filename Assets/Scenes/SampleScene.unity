@@ -463,7 +463,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1987125179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -596,6 +596,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Minion
       objectReference: {fileID: 0}
+    - target: {fileID: 1325398409379457935, guid: eeee6c433ddf64643893880cbdf78a41,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1325398409379457934, guid: eeee6c433ddf64643893880cbdf78a41,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -668,7 +673,7 @@ PrefabInstance:
     - target: {fileID: 8256007156604039842, guid: 2f6f52b198a16144d8bc9e94e269ece7,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8256007156604039845, guid: 2f6f52b198a16144d8bc9e94e269ece7,
         type: 3}

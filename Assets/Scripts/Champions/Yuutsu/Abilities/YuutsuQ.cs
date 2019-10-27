@@ -4,16 +4,7 @@ using UnityEngine;
 
 public class YuutsuQ : Ability
 {
-    private DamageAbilityData data;
-
-    public YuutsuQ(Champion c) : base(c)
-    {
-        data = Resources.Load("Champions/Yuutsu/Abilities/Yuutsu Q") as DamageAbilityData;
-    }
-    public override AbilityData GetData()
-    {
-        return data;
-    }
+    public YuutsuQ(Champion c) : base(c, "Champions/Yuutsu/Abilities/Yuutsu Q") { }
 
     public override void Fire(Champion caster)
     {
@@ -21,10 +12,10 @@ public class YuutsuQ : Ability
             return;
 
         //Trigger Visual
-        for (int i = 0; i < data.TargetTags.Length; i++)
+        for (int i = 0; i < Data.TargetTags.Length; i++)
         {
-            Collider[] outerHits = FetchTargets.ByCircle(caster.gameObject, data.CastDistance, data.TargetTags[i]);
-            Collider[] innerHits = FetchTargets.ByCircle(caster.gameObject, data.CastDistance / 2, data.TargetTags[i]);
+            Collider[] outerHits = FetchTargets.ByCircle(caster.gameObject, Data.CastDistance, Data.TargetTags[i]);
+            Collider[] innerHits = FetchTargets.ByCircle(caster.gameObject, Data.CastDistance / 2, Data.TargetTags[i]);
 
             CheckRadii(caster, outerHits, innerHits);
         }
@@ -32,6 +23,8 @@ public class YuutsuQ : Ability
 
     public void CheckRadii(Champion caster, Collider[] a, Collider[] b)
     {
+        DamageData[] dmgVals = (Data as DamageAbilityData).Values;
+
         for (int i = 0; i < a.Length; i++)
         {
             if (a[i].transform.parent?.gameObject == caster.gameObject)
@@ -46,7 +39,7 @@ public class YuutsuQ : Ability
                     //inside both, regular damage.
                     found = true;
                     b[j].transform.parent?.GetComponent<HealthController>()
-                        .TakeDamage(data.Values[champ.GetAbilityLevel(0) -1]);
+                        .TakeDamage(dmgVals[champ.GetAbilityLevel(0) -1]);
                 }
             }
 
@@ -56,9 +49,9 @@ public class YuutsuQ : Ability
                 DamageData multiplied = new DamageData(
                     caster.gameObject,
                     a[i].gameObject,
-                    data.Values[champ.GetAbilityLevel(0) - 1].Value * 1.5f,
-                    data.Values[champ.GetAbilityLevel(0) - 1].Type ,
-                    data.Values[champ.GetAbilityLevel(0) - 1].DamageType
+                    dmgVals[champ.GetAbilityLevel(0) - 1].Value * 1.5f,
+                    dmgVals[champ.GetAbilityLevel(0) - 1].Type ,
+                    dmgVals[champ.GetAbilityLevel(0) - 1].DamageType
                     );
 
                 a[i].transform.parent?.GetComponent<HealthController>().TakeDamage(multiplied);

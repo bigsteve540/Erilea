@@ -17,14 +17,19 @@ public class VFXController : MonoBehaviour
         ActiveVisuals.Add(instance);
         return instance;
     }
-    public void DestroyVFX(GameObject effect)
+    public GameObject DestroyVFX(GameObject effect)
     {
         bool removed = ActiveVisuals.Remove(effect);
 
         if (removed)
+        {
             Destroy(effect);
+            return null;
+        }
         else
-            throw new System.Exception("VFX Not found. Aborting destruction.");
+        {
+            return effect;
+        }   
     }
 
     void Update()

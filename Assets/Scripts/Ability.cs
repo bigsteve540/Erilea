@@ -4,18 +4,15 @@ using UnityEngine;
 
 public abstract class Ability
 {
-    public abstract AbilityData GetData();
     protected Champion champ;
+    public AbilityData Data { get; private set; }
 
     public abstract void Fire(Champion caster);
 
-    public virtual void OnAbilityTrigger(Entity caster) { }
-    public virtual void OnAbilityComplete(Entity caster) { }
-    public virtual void OnAbilityUpdate(Entity caster, float deltaTime) { }
-
-    public Ability(Champion c)
+    public Ability(Champion c, string dataFilePath)
     {
         champ = c;
+        Data = Resources.Load(dataFilePath) as AbilityData;
     }
 }
 

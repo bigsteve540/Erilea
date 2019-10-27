@@ -10,17 +10,15 @@ public abstract class CCEffect : StatusEffect
 
     private void Initialize()
     {
-        StatusEffectTriggers = new StatusEffectData();
-
-        StatusEffectTriggers.OnEffectStart += OnCCStart;
-        StatusEffectTriggers.OnUpdate += OnCCUpdate;
-        StatusEffectTriggers.OnEffectEnd += OnCCEnd;
+        OnEffectStart += OnCCStart;
+        OnUpdate += OnCCUpdate;
+        OnEffectEnd += OnCCEnd;
     }
     protected void Terminate()
     {
-        StatusEffectTriggers.OnEffectStart -= OnCCStart;
-        StatusEffectTriggers.OnUpdate -= OnCCUpdate;
-        StatusEffectTriggers.OnEffectEnd -= OnCCEnd;
+        OnEffectStart -= OnCCStart;
+        OnUpdate -= OnCCUpdate;
+        OnEffectEnd -= OnCCEnd;
     }
 
     public abstract void OnCCStart(Entity receiver);

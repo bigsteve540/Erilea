@@ -4,30 +4,32 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    AbilityController ac;
     [SerializeField]
-    AbilityController ability;
-    [SerializeField]
-    Champion champion;
+    Champion champion = null;
 
+    private void Start()
+    {
+        ac = champion.GetComponent<AbilityController>();
+    }
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            ability.Cast(ABILITY_CODE.Q);
+            ac.Cast(ABILITY_CODE.Q);
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            ability.Cast(ABILITY_CODE.W);
+            ac.Cast(ABILITY_CODE.W);
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            ability.Cast(ABILITY_CODE.E);
+            ac.Cast(ABILITY_CODE.E);
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            ability.Cast(ABILITY_CODE.R);
+            ac.Cast(ABILITY_CODE.R);
         }
 
         if (Input.GetKeyDown(KeyCode.S)) { champion.CancelPath(); }

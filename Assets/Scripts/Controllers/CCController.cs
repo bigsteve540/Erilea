@@ -15,12 +15,12 @@ public class CCController : MonoBehaviour
     public void ApplyCC(CCEffect cc)
     {
         ActiveCC.Add(cc);
-        cc.StatusEffectTriggers?.OnEffectStart?.Invoke(target);
+        cc.OnEffectStart?.Invoke(target);
     }
     public void RemoveCC(CCEffect cc)
     {
         ActiveCC.Remove(cc);
-        cc.StatusEffectTriggers?.OnEffectEnd?.Invoke(target);
+        cc.OnEffectEnd?.Invoke(target);
     }
     public void PurgeCC(CCEffect[] types = null)
     {
@@ -28,7 +28,7 @@ public class CCController : MonoBehaviour
         {
             for (int i = 0; i < ActiveCC.Count; i++)
             {
-                ActiveCC[i].StatusEffectTriggers?.OnEffectEnd?.Invoke(GetComponent<Entity>());
+                ActiveCC[i].OnEffectEnd?.Invoke(GetComponent<Entity>());
             }
             ActiveCC.Clear();
         }
@@ -41,7 +41,7 @@ public class CCController : MonoBehaviour
                     if(ActiveCC[j].GetType() == types[i].GetType())
                     {
                         ActiveCC.RemoveAt(j);
-                        types[i].StatusEffectTriggers?.OnEffectEnd?.Invoke(GetComponent<Entity>());
+                        types[i].OnEffectEnd?.Invoke(GetComponent<Entity>());
                     }
                 }
             }
@@ -52,7 +52,7 @@ public class CCController : MonoBehaviour
     {
         for (int i = 0; i < ActiveCC.Count; i++)
         {
-            ActiveCC[i].StatusEffectTriggers?.OnUpdate?.Invoke(target, Time.deltaTime);
+            ActiveCC[i].OnUpdate?.Invoke(target, Time.deltaTime);
         }
     }
 }
